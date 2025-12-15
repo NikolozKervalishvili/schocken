@@ -5,7 +5,8 @@ pub struct Player {
     // ++Ordering++
     combination: Option<Combination>,
     throw: Option<Throw>, // combination player threw
-    id: AtomicU32,        // must be unique
+    num_throws: u8,
+    id: AtomicU32, // must be unique
     // -- Ordering --
     name: String, // non unique
 }
@@ -17,6 +18,7 @@ impl Ord for Player {
         self.combination
             .cmp(&other.combination)
             .then_with(|| self.throw.cmp(&other.throw))
+            .then_with(|| other.num_throws.cmp(&self.num_throws))
             .then_with(|| other.id.load(Relaxed).cmp(&self.id.load(Relaxed)))
     }
 }
