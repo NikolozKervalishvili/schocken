@@ -3960,6 +3960,7 @@ version = "0.1.0"
 dependencies = [
  "bevy",
  "rand",
+ "thiserror 2.0.17",
  "tokio",
 ]
 

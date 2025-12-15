@@ -15,6 +15,15 @@ pub struct Player {
 // WARNING: sort backwards, e.g. [`sort_by(|a,b| b.cmp(a))`] so highest score first
 impl Ord for Player {
     fn cmp(&self, other: &Self) -> std::cmp::Ordering {
+        // if guard, because only on shockout later player wins (in same amount of throws)
+        if self.combination == other.combination && self.combination == Some(Combination::Schockout)
+        {
+            return other
+                .num_throws
+                .cmp(&self.num_throws)
+                .then_with(|| self.id.load(Relaxed).cmp(&self.id.load(Relaxed)));
+        }
+
         self.combination
             .cmp(&other.combination)
             .then_with(|| self.throw.cmp(&other.throw))
